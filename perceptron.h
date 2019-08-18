@@ -6,8 +6,8 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/18 13:31:39 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/18 13:31:43 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/18 15:02:19 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void	initialize_train_set(float **train_set);
+void	initialize_train_set(float **train_set, int *desired);
