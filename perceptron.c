@@ -6,29 +6,24 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 16:39:13 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/19 15:07:46 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/19 15:17:48 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "perceptron.h"
-//pente de la fonction sigmoide en zero
-#define coef 2.0
-//demi-pente (pour l'oprerateur derive)
-#define coed 1.0
 
 //fonction sigmoide
 double	sigmo(double a)
 {
-	double	aux = exp(coef * a);
-	//fonction impaire, a valeurs dans ]-1;+1[
+	double	aux = exp(a);
+
 	return (1 / (aux + 1));
 }
 
 //operateur derive
 double	deriv(double fa)
 {
-	//formule pour calculer f'(a) a partir de f(a)
-	return (coed * (1 + fa) * (1 - fa));
+	return (fa * (1 - fa));
 }
 
 int		train(float **train_set, int *desired, float *weights)
@@ -46,9 +41,9 @@ int		train(float **train_set, int *desired, float *weights)
 		sum += train_set[i][1] * weights[1];
 		sum += 1 * weights[2];
 		// fonction d'activation : a seuil ou de Heaviside
-		result = sum < 0 ? 0 : 1;
+		//result = sum < 0 ? 0 : 1;
 		// fonction d'activation : sigmoide
-		//result = sigmo(sum) > 0.5 ? 0 : 1;
+		result = sigmo(sum) > 0.5 ? 0 : 1;
 		error = desired[i] - result;
 		if (error)
 			nb_errors++;
