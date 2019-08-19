@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/18 13:17:24 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/18 15:01:03 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/19 14:41:20 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,38 @@
 
 void	initialize_train_set(float **train_set, int *desired)
 {
+	for (int i = 0; i < 40; i++)
+		train_set[i] = (float*)malloc(sizeof(float) * 2);
 	train_set[0][0] = 10;
 	train_set[0][1] = 1;
-	desired[0] = -1;
+	desired[0] = 0;
 	train_set[1][0] = 12;
 	train_set[1][1] = 9;
-	desired[1] = -1;
+	desired[1] = 0;
 	train_set[2][0] = 7;
 	train_set[2][1] = 18;
-	desired[2] = -1;
+	desired[2] = 0;
 	train_set[3][0] = 9;
 	train_set[3][1] = 2;
-	desired[3] = -1;
+	desired[3] = 0;
 	train_set[4][0] = 7;
 	train_set[4][1] = 9;
-	desired[4] = -1;
+	desired[4] = 0;
 	train_set[5][0] = 4;
 	train_set[5][1] = 18;
-	desired[5] = -1;
+	desired[5] = 0;
 	train_set[6][0] = 6;
 	train_set[6][1] = 1;
-	desired[6] = -1;
+	desired[6] = 0;
 	train_set[7][0] = 9;
 	train_set[7][1] = 9;
-	desired[7] = -1;
+	desired[7] = 0;
 	train_set[8][0] = 5;
 	train_set[8][1] = 1;
-	desired[8] = -1;
+	desired[8] = 0;
 	train_set[9][0] = 1;
 	train_set[9][1] = 5;
-	desired[9] = -1;
+	desired[9] = 0;
 	train_set[10][0] = 25;
 	train_set[10][1] = 20;
 	desired[10] = 1;
@@ -76,22 +78,22 @@ void	initialize_train_set(float **train_set, int *desired)
 	desired[19] = 1;
 	train_set[20][0] = 2;
 	train_set[20][1] = 20;
-	desired[20] = -1;
+	desired[20] = 0;
 	train_set[21][0] = 5;
 	train_set[21][1] = 21;
-	desired[21] = -1;
+	desired[21] = 0;
 	train_set[22][0] = 7;
 	train_set[22][1] = 22;
-	desired[22] = -1;
+	desired[22] = 0;
 	train_set[23][0] = 2;
 	train_set[23][1] = 38;
-	desired[23] = -1;
+	desired[23] = 0;
 	train_set[24][0] = 9;
 	train_set[24][1] = 31;
-	desired[24] = -1;
+	desired[24] = 0;
 	train_set[25][0] = 2;
 	train_set[25][1] = 24;
-	desired[25] = -1;
+	desired[25] = 0;
 	train_set[26][0] = 37;
 	train_set[26][1] = 7;
 	desired[26] = 1;
@@ -106,19 +108,19 @@ void	initialize_train_set(float **train_set, int *desired)
 	desired[29] = 1;
 	train_set[30][0] = 10;
 	train_set[30][1] = 91;
-	desired[30] = -1;
+	desired[30] = 0;
 	train_set[31][0] = 12;
 	train_set[31][1] = 99;
-	desired[31] = -1;
+	desired[31] = 0;
 	train_set[32][0] = 7;
 	train_set[32][1] = 98;
-	desired[32] = -1;
+	desired[32] = 0;
 	train_set[33][0] = 9;
 	train_set[33][1] = 92;
-	desired[33] = -1;
+	desired[33] = 0;
 	train_set[34][0] = 7;
 	train_set[34][1] = 89;
-	desired[34] = -1;
+	desired[34] = 0;
 	train_set[35][0] = 49;
 	train_set[35][1] = 18;
 	desired[35] = 1;
