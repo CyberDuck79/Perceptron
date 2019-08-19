@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 16:39:13 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/19 15:01:45 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/19 15:07:46 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,7 @@ int		train(float **train_set, int *desired, float *weights)
 		weights[1] = weights[1] + (learning_rate * error * train_set[i][1]);
 		weights[2] = weights[2] + (learning_rate * error);
 		// fonction d'activation : sigmoide
-		//weights[0] = weights[0] - (learning_rate * error * deriv(result) * train_set[i][0]);
-		//weights[1] = weights[1] - (learning_rate * error * deriv(result) * train_set[i][1]);
-		//weights[2] = weights[2] - (learning_rate * error * deriv(result));
+		// -> calcul du gradient puis retour ?
 	}
 	return (nb_errors);
 }
