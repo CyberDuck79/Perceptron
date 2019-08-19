@@ -6,13 +6,15 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 16:39:13 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/19 14:49:56 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/19 15:01:45 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "perceptron.h"
 //pente de la fonction sigmoide en zero
 #define coef 2.0
+//demi-pente (pour l'oprerateur derive)
+#define coed 1.0
 
 //fonction sigmoide
 double	sigmo(double a)
@@ -20,6 +22,13 @@ double	sigmo(double a)
 	double	aux = exp(coef * a);
 	//fonction impaire, a valeurs dans ]-1;+1[
 	return (1 / (aux + 1));
+}
+
+//operateur derive
+double	deriv(double fa)
+{
+	//formule pour calculer f'(a) a partir de f(a)
+	return (coed * (1 + fa) * (1 - fa));
 }
 
 int		train(float **train_set, int *desired, float *weights)
@@ -43,9 +52,14 @@ int		train(float **train_set, int *desired, float *weights)
 		error = desired[i] - result;
 		if (error)
 			nb_errors++;
+		// fonction d'activation : a seuil ou de Heaviside
 		weights[0] = weights[0] + (learning_rate * error * train_set[i][0]);
 		weights[1] = weights[1] + (learning_rate * error * train_set[i][1]);
-		weights[2] = weights[2] + error;
+		weights[2] = weights[2] + (learning_rate * error);
+		// fonction d'activation : sigmoide
+		//weights[0] = weights[0] - (learning_rate * error * deriv(result) * train_set[i][0]);
+		//weights[1] = weights[1] - (learning_rate * error * deriv(result) * train_set[i][1]);
+		//weights[2] = weights[2] - (learning_rate * error * deriv(result));
 	}
 	return (nb_errors);
 }
