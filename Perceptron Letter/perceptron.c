@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 14:59:35 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/20 19:00:23 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/20 19:04:25 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ perceptron simple avec 30 entrees (-1,1) :
  - poids de depart aleatoires. OK
  - choisir une lettre designee comme juste. OK
  - faire l'entrainement => presenter toutes les lettres. OK
- - un nombre choisit de passage ou jusque plus d'erreur.
- - seuil et sigmoide.
+ - un nombre choisit de passage ou jusque plus d'erreur. -> plus d'erreur OK
+ - seuil et sigmoide. -> seuil OK
+ - faire passage de test avec plus ou moins d'entropie.
 */
 
 /*fonction sigmoide
