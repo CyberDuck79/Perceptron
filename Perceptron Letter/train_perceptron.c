@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 14:59:35 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/21 16:16:13 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/21 17:55:04 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ perceptron simple avec 30 entrees (-1,1) :
  - faire passage de test avec plus ou moins d'entropie.
  - faire export des poids pour chaque lettres vers un fichier. OK
  - faire une fonction prenant une lettre et reconnaissant la lettre. OK
- - APPREND TROP BIEN !
  - menage / rationalisation / factorisation !!!
-
- - Erreurs a corriger : le biais est un input directement corrige
 */
 
 //fonction sigmoide
@@ -90,11 +87,10 @@ void			train_perceptron(letter **alphabet, int let_i, float l_rate)
 {
 	float	*weights = (float*)malloc(sizeof(float) * 26);
 	int		try = 0;
-	int		errors;
 
 	for (int i = 0; i < 26; i++)
 		weights[i] = (float)rand()/RAND_MAX;
-	while ((errors = train(alphabet, weights, let_i, l_rate) && errors < 2))
+	while (train(alphabet, weights, let_i, l_rate) && try < 100)
 		try++;
 	printf(">%c\n", alphabet[let_i]->letter);
 	for (int y = 0; y < 5; y++)

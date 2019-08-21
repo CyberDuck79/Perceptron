@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 16:27:44 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/21 15:58:38 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/21 17:23:09 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static float	get_learning_rate(void)
 
 	while (learning_rate >= 1.0)
 	{
-		write(1, "\nEntrez le taux d'apprentissage : ", 34);
+		write(1, "Entrez le taux d'apprentissage : ", 34);
 		scanf("%f", &learning_rate);
 		if (learning_rate >= 1.0)
 			write(1, "\nErreur.", 8);
