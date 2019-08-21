@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   perceptron.c                                       :+:      :+:    :+:   */
+/*   train_perceptron.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 14:59:35 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/20 19:04:25 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/21 16:16:13 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,31 +21,28 @@ perceptron simple avec 30 entrees (-1,1) :
  - un nombre choisit de passage ou jusque plus d'erreur. -> plus d'erreur OK
  - seuil et sigmoide. -> seuil OK
  - faire passage de test avec plus ou moins d'entropie.
+ - faire export des poids pour chaque lettres vers un fichier. OK
+ - faire une fonction prenant une lettre et reconnaissant la lettre. OK
+ - APPREND TROP BIEN !
+ - menage / rationalisation / factorisation !!!
+
+ - Erreurs a corriger : le biais est un input directement corrige
 */
 
-/*fonction sigmoide
+//fonction sigmoide
 static double	sigmo(double a)
 {
-	double	aux = exp(a);
-
-	return (1 / (aux + 1));
-}
-*/
-
-static float	get_learning_rate(void)
-{
-	float	learning_rate = 1.0;
-
-	while (learning_rate >= 1.0)
+	if (a < -20.0)
 	{
-		write(1, "\nEntrez le taux d'apprentissage : ", 34);
-		if (!scanf("%f", &learning_rate))
-			write(1, "\nErreur de type.", 16);
-		if (learning_rate >= 1.0)
-			write(1, "\nErreur >= 1.", 13);
+		return 0.0;
 	}
-	return (learning_rate);
+	else if (a > 20.0)
+	{
+		return 1.0;
+	}
+	return (1.0 / (1.0 + exp(-a)));
 }
+
 
 static int		activate(int matrix[5][5], float *weights)
 {
@@ -56,9 +53,9 @@ static int		activate(int matrix[5][5], float *weights)
 				sum += matrix[x][y] * weights[x + (y*5)];
 	sum += weights[25];
 	// fonction d'activation : a seuil ou de Heaviside
-	return (sum < 0 ? -1 : 1);
+	//return (sum < 0 ? 0 : 1);
 	// fonction d'activation : sigmoide
-	//return (sigmo(sum) > 0.5 ? -1 : 1);
+	return (sigmo(sum) > 0.5 ? 1 : 0);
 }
 
 static void		adjust(int mtx[5][5], float *weights, float l_rate, int error)
@@ -66,50 +63,42 @@ static void		adjust(int mtx[5][5], float *weights, float l_rate, int error)
 	int	wi;
 
 	for (int y = 0; y < 5; y++)
-			for (int x = 0; x < 5; x++)
-			{
-				wi = x + (y*5);
-				weights[wi] = weights[wi] + (mtx[x][y] * l_rate * error);
-			}
+		for (int x = 0; x < 5; x++)
+		{
+			wi = x + (y*5);
+			weights[wi] = weights[wi] + (mtx[x][y] * l_rate * error);
+		}
 	weights[25] = weights[25] + (l_rate * error);
 }
 
-static int		train(letter **alphabet, float *weights, int let_i, int len)
+static int		train(letter **alpha, float *weights, int let_i, float l_rate)
 {
-	static float	learning_rate = 0;
-	int				error;
+	float			error;
 	int				nb_errors = 0;
 
-	if (!learning_rate)
-		learning_rate = get_learning_rate();
-	for (int i = 0; i < len; i++)
+	for (int i = 0; i < 26; i++)
 	{
-		error = (i == let_i ? 1 : -1) - activate(alphabet[i]->matrix, weights);
+		error = (i == let_i ? 1 : 0) - activate(alpha[i]->matrix, weights);
 		if (error)
 			nb_errors++;
-		adjust(alphabet[i]->matrix, weights, learning_rate, error);
+		adjust(alpha[i]->matrix, weights, l_rate, error);
 	}
 	return (nb_errors);
 }
 
-// SUPERVISED LEARNING - 2D inputs classifier
-void			perceptron(letter **alphabet, int let_i, int len)
+void			train_perceptron(letter **alphabet, int let_i, float l_rate)
 {
-
 	float	*weights = (float*)malloc(sizeof(float) * 26);
 	int		try = 0;
 	int		errors;
 
 	for (int i = 0; i < 26; i++)
 		weights[i] = (float)rand()/RAND_MAX;
-	while ((errors = train(alphabet, weights, let_i, len)))
-	{
+	while ((errors = train(alphabet, weights, let_i, l_rate) && errors < 2))
 		try++;
-		printf("essai %d, nombres d'erreurs : %d\n", try, errors);
-	}
-	printf("SUCCES\n");
+	printf(">%c\n", alphabet[let_i]->letter);
 	for (int y = 0; y < 5; y++)
 			for (int x = 0; x < 5; x++)
-				printf("w%d : %f\n", x + (y*5), weights[x + (y*5)]);
-	printf("w%d : %f\n", 25, weights[25]);
+				printf("%-+12f\n", weights[x + (y*5)]);
+	printf("%-+12f\n\n", weights[25]);
 }

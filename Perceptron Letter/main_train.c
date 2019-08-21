@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_train.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 16:27:44 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/20 18:53:07 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/21 15:58:38 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "perceptron.h"
 #include <fcntl.h>
 
-
-
-static int		get_train_letter(letter **alphabet, int len)
+static float	get_learning_rate(void)
 {
-	char	c = 0;
-	int		valid_input = 0;
+	float	learning_rate = 1.0;
 
-	while (!valid_input)
+	while (learning_rate >= 1.0)
 	{
-		write(1, "\nLettre d'entrainement : ", 25);
-		if (!(valid_input = scanf("%c", &c)))
-			write(1, "\nErreur de type.", 16);
+		write(1, "\nEntrez le taux d'apprentissage : ", 34);
+		scanf("%f", &learning_rate);
+		if (learning_rate >= 1.0)
+			write(1, "\nErreur.", 8);
 	}
-	for (int i = 0; i < len; i++)
-		if (c == alphabet[i]->letter)
-			return (i);
-	return (-1);
+	return (learning_rate);
 }
 
 static int		valid_line(char *buffer)
@@ -40,13 +35,13 @@ static int		valid_line(char *buffer)
 	return (1);
 }
 
-static letter	**parse_alphabet(int fd, int len)
+static letter	**parse_alphabet(int fd)
 {
 	letter	**alphabet;
 	char	buffer[5];
 	int		a = 0;
 
-	alphabet = (letter**)malloc(sizeof(letter*) * len);
+	alphabet = (letter**)malloc(sizeof(letter*) * 26);
 	while (read(fd, &buffer, 1))
 	{
 		if (buffer[0] != '>')
@@ -72,41 +67,42 @@ static letter	**parse_alphabet(int fd, int len)
 	return (alphabet);
 }
 
-static int		count_letter(int fd)
-{
-	int		len = 0;
-	char	c;
-
-	while (read(fd, &c, 1))
-		if (c == '>')
-			len++;
-	return (len);
-}
-
-int		main(int argc, char **argv)
+int		main(void)
 {
 	int		fd;
-	int		len;
-	int		let_i;
-	letter	**alphabet = NULL;
+	int		let_i = 0;
+	float	l_rate;
+	letter	**alphabet;
 
-	if (argc == 2)
-	{
-		fd = open(argv[1], O_RDONLY);
-		len = count_letter(fd);
-		close(fd);
-		fd = open(argv[1], O_RDONLY);
-		alphabet = parse_alphabet(fd, len);
-		close(fd);
-		alphabet ? write(1, "fichier lue\n", 12) : write(1, "erreur\n", 7);
+	fd = open("alphabet.data", O_RDONLY);
+	if (fd == -1) {
+		perror("open failed");
+		exit(1);
 	}
+	if(!(alphabet = parse_alphabet(fd)))
+	{
+		close(fd);
+		perror("error in file");
+		exit(1);
+	}
+	close(fd);
 	if (alphabet)
 	{
-		let_i = get_train_letter(alphabet, len);
-		if (let_i >= 0)
-			perceptron(alphabet, let_i, len);
-		else
-			write(1, "erreur\n", 7);
+		l_rate = get_learning_rate();
+		fd = open("export.data", O_WRONLY | O_CREAT, 0644);
+		if (fd == -1)
+		{
+			perror("open failed");
+			exit(1);
+		}
+		if (dup2(fd, 1) == -1)
+		{
+			perror("dup2 failed"); 
+			exit(1);
+		}
+		for (char c = 'A'; c <= 'Z'; c++)
+			train_perceptron(alphabet, let_i++, l_rate);
+		close(fd);
 	}
 	return (0);
 }

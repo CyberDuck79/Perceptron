@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 14:59:58 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/20 18:11:02 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/21 15:01:29 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,11 @@ typedef struct
 	int		matrix[5][5];
 }			letter;
 
-void		perceptron(letter **alphabet, int let_i, int len);
+typedef struct
+{
+	char	letter;
+	float	*weights;
+}			weights;
+
+void		train_perceptron(letter **alphabet, int let_i, float l_rate);
+void		reco_perceptron(weights **alphabet, int **matrix);
