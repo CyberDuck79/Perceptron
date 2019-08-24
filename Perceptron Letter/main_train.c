@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 16:27:44 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/21 17:23:09 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/24 10:39:51 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static float	get_learning_rate(void)
 
 static int		valid_line(char *buffer)
 {
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < X; i++)
 		if (!(buffer[i] == '1' || buffer[i] == ' '))
 			return (0);
 	return (1);
@@ -38,10 +38,10 @@ static int		valid_line(char *buffer)
 static letter	**parse_alphabet(int fd)
 {
 	letter	**alphabet;
-	char	buffer[5];
+	char	buffer[X];
 	int		a = 0;
 
-	alphabet = (letter**)malloc(sizeof(letter*) * 26);
+	alphabet = (letter**)malloc(sizeof(letter*) * N);
 	while (read(fd, &buffer, 1))
 	{
 		if (buffer[0] != '>')
@@ -49,13 +49,15 @@ static letter	**parse_alphabet(int fd)
 		else
 		{
 			alphabet[a] = (letter*)malloc(sizeof(letter));
+			alphabet[a]->matrix = (int**)malloc(sizeof(int*) * X);
 			read(fd, &alphabet[a]->letter, 1);
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < X; i++)
 			{
+				alphabet[a]->matrix[i] = (int*)malloc(sizeof(int) * X);
 				read(fd, &buffer, 1);
-				read(fd, &buffer, 5);
+				read(fd, &buffer, X);
 				if (valid_line(buffer))
-					for (int j = 0; j < 5; j++)
+					for (int j = 0; j < X; j++)
 						alphabet[a]->matrix[i][j] = (buffer[j] == '1' ? 1 : 0);
 				else
 					return (NULL);
@@ -74,7 +76,7 @@ int		main(void)
 	float	l_rate;
 	letter	**alphabet;
 
-	fd = open("alphabet.data", O_RDONLY);
+	fd = open("digit.data", O_RDONLY);
 	if (fd == -1) {
 		perror("open failed");
 		exit(1);
@@ -100,7 +102,7 @@ int		main(void)
 			perror("dup2 failed"); 
 			exit(1);
 		}
-		for (char c = 'A'; c <= 'Z'; c++)
+		for (int i = 0; i < N; i++)
 			train_perceptron(alphabet, let_i++, l_rate);
 		close(fd);
 	}

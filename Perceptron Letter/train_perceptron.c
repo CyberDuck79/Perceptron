@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 14:59:35 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/21 17:55:04 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/24 10:17:18 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,31 +41,31 @@ static double	sigmo(double a)
 }
 
 
-static int		activate(int matrix[5][5], float *weights)
+static int		activate(int **matrix, float *weights)
 {
 	float	sum = 0;
 
-	for (int y = 0; y < 5; y++)
-			for (int x = 0; x < 5; x++)
+	for (int y = 0; y < X; y++)
+			for (int x = 0; X < 5; x++)
 				sum += matrix[x][y] * weights[x + (y*5)];
-	sum += weights[25];
+	sum += weights[X*X];
 	// fonction d'activation : a seuil ou de Heaviside
 	//return (sum < 0 ? 0 : 1);
 	// fonction d'activation : sigmoide
 	return (sigmo(sum) > 0.5 ? 1 : 0);
 }
 
-static void		adjust(int mtx[5][5], float *weights, float l_rate, int error)
+static void		adjust(int **mtx, float *weights, float l_rate, int error)
 {
 	int	wi;
 
-	for (int y = 0; y < 5; y++)
-		for (int x = 0; x < 5; x++)
+	for (int y = 0; y < X; y++)
+		for (int x = 0; x < X; x++)
 		{
 			wi = x + (y*5);
 			weights[wi] = weights[wi] + (mtx[x][y] * l_rate * error);
 		}
-	weights[25] = weights[25] + (l_rate * error);
+	weights[X*X] = weights[X*X] + (l_rate * error);
 }
 
 static int		train(letter **alpha, float *weights, int let_i, float l_rate)
@@ -73,7 +73,7 @@ static int		train(letter **alpha, float *weights, int let_i, float l_rate)
 	float			error;
 	int				nb_errors = 0;
 
-	for (int i = 0; i < 26; i++)
+	for (int i = 0; i < N; i++)
 	{
 		error = (i == let_i ? 1 : 0) - activate(alpha[i]->matrix, weights);
 		if (error)
@@ -85,16 +85,16 @@ static int		train(letter **alpha, float *weights, int let_i, float l_rate)
 
 void			train_perceptron(letter **alphabet, int let_i, float l_rate)
 {
-	float	*weights = (float*)malloc(sizeof(float) * 26);
+	float	*weights = (float*)malloc(sizeof(float) * (X*X)+1);
 	int		try = 0;
 
-	for (int i = 0; i < 26; i++)
+	for (int i = 0; i < (X*X)+1; i++)
 		weights[i] = (float)rand()/RAND_MAX;
 	while (train(alphabet, weights, let_i, l_rate) && try < 100)
 		try++;
 	printf(">%c\n", alphabet[let_i]->letter);
-	for (int y = 0; y < 5; y++)
-			for (int x = 0; x < 5; x++)
+	for (int y = 0; y < X; y++)
+			for (int x = 0; x < X; x++)
 				printf("%-+12f\n", weights[x + (y*5)]);
-	printf("%-+12f\n\n", weights[25]);
+	printf("%-+12f\n\n", weights[X*X]);
 }

@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/21 12:18:54 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/21 17:50:23 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/24 10:32:48 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ static float		activate(int **matrix, float *weights)
 {
 	float	sum = 0;
 
-	for (int y = 0; y < 5; y++)
-			for (int x = 0; x < 5; x++)
+	for (int y = 0; y < X; y++)
+			for (int x = 0; x < X; x++)
 				sum += matrix[x][y] * weights[x + (y*5)];
-	sum += weights[25];
+	sum += weights[X*X];
 	// fonction d'activation : a seuil ou de Heaviside
 	//return (sum < 0 ? 0 : 1);
 	// fonction d'activation : sigmoide
@@ -47,7 +47,7 @@ void			reco_perceptron(weights **alphabet, int **matrix)
 	float	err;
 	float	err_max = 0.0;
 
-	for (int i = 0; i < 26; i++)
+	for (int i = 0; i < N; i++)
 	{
 		if ((err = activate(matrix, alphabet[i]->weights)) > err_max)
 		{

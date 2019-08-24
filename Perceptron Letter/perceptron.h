@@ -6,7 +6,7 @@
 /*   By: fhenrion <fhenrion@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/20 14:59:58 by fhenrion          #+#    #+#             */
-/*   Updated: 2019/08/21 15:01:29 by fhenrion         ###   ########.fr       */
+/*   Updated: 2019/08/24 10:31:20 by fhenrion         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,13 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#define X 5
+#define N 10
+
 typedef struct
 {
 	char	letter;
-	int		matrix[5][5];
+	int		**matrix;
 }			letter;
 
 typedef struct
